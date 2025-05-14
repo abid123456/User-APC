@@ -38,6 +38,7 @@ DWORD WINAPI ThreadProc(
 int main()
 {
 	HANDLE hThread = CreateThread(NULL, 0, ThreadProc, 0, 0, NULL);
+	DWORD dr;
 	if (hThread)
 	{
 		puts("Sleeping");
@@ -45,7 +46,9 @@ int main()
 		puts("Sleep done");
 		for (int q = 0; q < 100; q++)
 		{
-			if (!QueueUserAPC(Papcfunc, hThread, q))
+			puts("APC scheduling");
+			dr = QueueUserAPC(Papcfunc, hThread, q);
+			if (!dr)
 			{
 				wprintf(L"ERROR: (%d) QueueUserAPC with value q=%d\n", GetLastError(), q);
 				break;
